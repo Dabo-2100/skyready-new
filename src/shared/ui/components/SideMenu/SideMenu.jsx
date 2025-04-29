@@ -8,7 +8,7 @@ export default function SideMenu() {
     const menuStyle = clsx(
         "h-auto md:h-full",
         "w-full md:w-[250px]",
-        "bg-slate-400 dark:bg-gray-800",
+        "bg-slate-400 dark:bg-gray-900",
         "order-2 md:order-1",
         "p-0",
         "flex flex-row md:flex-col",

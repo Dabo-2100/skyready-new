@@ -14,7 +14,6 @@ import Loader from "../components/Loader";
 export default function LoginPage() {
     const navigate = useNavigate();
     const { data: userInfo, isLoading } = useQuery({ queryKey: ['userInfo'], queryFn: UserRepo.user_auth });
-    console.log(userInfo);
     const [showPassword, setShowPassword] = useState(false);
     const togglePassword = () => setShowPassword(prev => !prev);
     const intialValues = { email: "", password: "", rememberIndex: false };
@@ -35,10 +34,7 @@ export default function LoginPage() {
         "bg-slate-300 dark:bg-black/30"
     );
 
-
-    useEffect(() => {
-        !isLoading && userInfo && navigate('/')
-    }, [isLoading, userInfo])
+    useEffect(() => { !isLoading && userInfo && navigate('/') }, [isLoading, userInfo])
 
     return (
         <div className={pageStyle}>
@@ -46,9 +42,7 @@ export default function LoginPage() {
             <Formik initialValues={intialValues} validationSchema={LoginSchema} onSubmit={handleLogin}>
                 <motion.div className={formStyle} initial={{ opacity: 0, y: "-100vh" }} animate={{ opacity: 1, y: 0, transition: { duration: 0.8 } }}>
                     <Form >
-                        <div>
-                            <h1 className="text-lg text-center w-full">Welcome Back , Please Login</h1>
-                        </div>
+                        <div><h1 className="text-lg text-center w-full">Welcome Back , Please Login</h1></div>
 
                         <div className="flex flex-col gap-3">
 

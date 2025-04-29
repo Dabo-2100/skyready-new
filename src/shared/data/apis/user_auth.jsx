@@ -1,7 +1,4 @@
 import axios from "axios"
-import { domain } from "../../../zustand-store"
-
 export const userAuth = async () => {
-    let token = sessionStorage.getItem('token') || localStorage.getItem('token');
-    return await axios.get(`${domain}/api/users/me`, { headers: { Authorization: `Bearer ${token}` } }).then(res => res.data).catch(() => false);
+    return await axios.get('http://82.112.241.233:2000/api/users/me', { headers: { Authorization: `Bearer ${localStorage.getItem("token") || sessionStorage.getItem("token")}` } }).then(res => res.data).catch(() => false);
 }
