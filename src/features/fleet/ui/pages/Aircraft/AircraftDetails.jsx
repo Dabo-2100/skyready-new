@@ -1,11 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
 import { FaLongArrowAltLeft } from "react-icons/fa";
 import { Link, useParams } from "react-router-dom";
-import { AircraftRepo } from "../../data/AircraftRepo";
+import { AircraftRepo } from "../../../data/AircraftRepo";
 import { Field, Form, Formik } from "formik";
-import { AircraftSchema } from "../validators/AircraftSchema";
 import { useEffect, useState } from "react";
-import Loader from "../../../../shared/ui/components/Loader";
+import Loader from "../../../../../shared/ui/components/Loader";
 
 export default function AircraftDetails() {
     const [intialValues, setIntialValue] = useState({ serialNo: "", tailNo: "", registrationNo: "" });
@@ -68,10 +67,8 @@ export default function AircraftDetails() {
                             </div>
                         </Form>
                     </Formik>
-
                 </div>
             </div>
-
         </div>
     )
 }

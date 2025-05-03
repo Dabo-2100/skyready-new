@@ -2,57 +2,61 @@ import { Link } from "react-router-dom";
 import { FaLongArrowAltLeft } from "react-icons/fa";
 import { ErrorMessage, Field, Form, Formik } from "formik";
 import { useQuery } from "@tanstack/react-query";
-import Loader from "../../../../shared/ui/components/Loader";
-import { AircraftRepo } from "../../data/AircraftRepo";
-import { noRefreshState } from "../../../../zustand-store";
+import Loader from "../../../../../shared/ui/components/Loader";
+import { AircraftRepo } from "../../../data/AircraftRepo";
+import { noRefreshState } from "../../../../../zustand-store";
 import * as Yup from 'yup';
 import { useEffect, useState } from "react";
+import useNewAircraft from "../../hooks/useNewAircraft";
 export default function NewAircraft() {
     // State
     const [aircraftList, setAircraftList] = useState([]);
     const [modelId, setModelId] = useState(null);
-
     // Queries
     const { data: aircraftListData } = useQuery({ enabled: !!modelId, queryKey: ['aircraftList', modelId], queryFn: () => AircraftRepo.index_aircraft(1, modelId), ...noRefreshState });
     const { data: aircraftStatuses } = useQuery({ queryKey: ['aircraftStatuses'], queryFn: AircraftRepo.index_aircraft_statuses, ...noRefreshState });
     const { data: aircraftUsages } = useQuery({ queryKey: ['aircraftUsages'], queryFn: AircraftRepo.index_aircraft_usages, ...noRefreshState });
     const { data: aircraftManufacturers, isLoading } = useQuery({ queryKey: ['aircraftManufacturers'], queryFn: AircraftRepo.index_aircraft_manudacturers, ...noRefreshState });
-
+    const { mutate: newAircraft } = useNewAircraft();
     // Formik
-    const initialValues = { serialNo: "", tailNo: "", RegistrationNo: "", aircraft_usage: "", aircraft_status: "", aircraft_model: -1, vendorId: -1, typeId: -1 }
+    const initialValues = { serialNo: "", tailNo: "", registrationNo: "", aircraft_usage: "", aircraft_status: "", aircraft_model: "", vendorId: -1, typeId: -1 }
     const validationSchema = Yup.object({
         serialNo: Yup.string().required('Serial No is required').notOneOf(aircraftList?.map(el => el.serialNo) || [], 'Serial No already exists'),
         tailNo: Yup.string().required('Tail No is required').notOneOf(aircraftList?.map(el => el.tailNo) || [], 'Tail No already exists'),
-        RegistrationNo: Yup.string().required('Registration No is required').notOneOf(aircraftList?.map(el => el.registrationNo) || [], 'Registration No already exists'),
+        registrationNo: Yup.string().required('Registration No is required').notOneOf(aircraftList?.map(el => el.registrationNo) || [], 'Registration No already exists'),
         aircraft_model: Yup.string().required('Aircraft Model is required'),
         aircraft_usage: Yup.string().required('Aircraft Usage is required'),
         aircraft_status: Yup.string().required('Aircraft Status is required'),
     });
 
     // Handlers
-    const handleSubmit = () => { console.log('Hello There') }
+    const handleSubmit = (values) => {
+        delete values.vendorId;
+        delete values.typeId;
+        newAircraft(values);
+    }
 
     // Effects
     useEffect(() => { setAircraftList(aircraftListData) }, [aircraftListData]);
     return (
-        <div className="flex flex-col w-full h-full">
+        <div className="flex flex-col w-full h-full overflow-auto">
             {isLoading && <Loader />}
-            <div className="w-full p-3 flex items-center justify-between gap-3 border-b border-b-slate-50/20">
-                <Link to="../" className="text-primary flex items-center gap-2"><FaLongArrowAltLeft /> Back</Link>
-                <h1 className="badge badge-soft badge-info h-auto font-bold py-3">Add New Aircraft to fleet</h1>
-                <button className="btn btn-soft btn-primary">Save</button>
-            </div>
-            <div className="w-full grow p-3 overflow-auto">
-                <Formik validationSchema={validationSchema} initialValues={initialValues} onSubmit={handleSubmit}>
-                    {
-                        ({ values }) => {
-                            // eslint-disable-next-line react-hooks/rules-of-hooks  
-                            useEffect(() => {
-                                if (values?.aircraft_model && values.aircraft_model !== -1) { setModelId(values.aircraft_model) }
-                            }, [values.aircraft_model]);
-                            return (
+            <Formik initialValues={initialValues} onSubmit={handleSubmit} validationSchema={validationSchema}>
+                {({ values }) => {
+                    // eslint-disable-next-line react-hooks/rules-of-hooks  
+                    useEffect(() => {
+                        if (values?.aircraft_model && values.aircraft_model !== -1) { setModelId(values.aircraft_model) }
+                    }, [values.aircraft_model]);
+                    return (
+                        <Form className="flex flex-col w-full h-full">
+                            <div className="w-full p-3 flex items-center justify-between gap-3 border-b border-b-slate-50/20">
+                                <Link to="../" className="text-primary flex items-center gap-2"><FaLongArrowAltLeft /> Back</Link>
+                                <h1 className="badge badge-soft badge-info h-auto font-bold py-3">Add New Aircraft to fleet</h1>
+                                <button className="btn btn-soft btn-primary" type="submit">Save</button>
+                            </div>
+                            <div className="w-full grow p-3  bg-red">
                                 <div className="bg-black/30 rounded p-3 w-full">
-                                    <Form className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
+                                    <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
                                         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 md:col-span-2 lg:col-span-3">
                                             <div className="flex flex-col gap-2">
                                                 <label>Manufacturer<span className="text-red-500">*</span></label>
@@ -96,7 +100,7 @@ export default function NewAircraft() {
                                         </div>
 
                                         {
-                                            values?.aircraft_model != -1 &&
+                                            (values?.aircraft_model != -1 && values?.aircraft_model != "") &&
                                             <>
                                                 <div className="flex flex-col gap-2">
                                                     <label>Serial No <span className="text-red-500">*</span></label>
@@ -106,8 +110,8 @@ export default function NewAircraft() {
 
                                                 <div className="flex flex-col gap-2">
                                                     <label>Registration No<span className="text-red-500">*</span></label>
-                                                    <Field name="RegistrationNo" className="input w-full" placeholder="Enter registeraion no ..." type="text" />
-                                                    <ErrorMessage name="RegistrationNo" component={"div"} className="text-red-500" />
+                                                    <Field name="registrationNo" className="input w-full" placeholder="Enter registeraion no ..." type="text" />
+                                                    <ErrorMessage name="registrationNo" component={"div"} className="text-red-500" />
                                                 </div>
 
                                                 <div className="flex flex-col gap-2">
@@ -143,13 +147,13 @@ export default function NewAircraft() {
                                                 </div>
                                             </>
                                         }
-                                    </Form>
+                                    </div>
                                 </div>
-                            )
-                        }
-                    }
-                </Formik>
-            </div>
+                            </div>
+                        </Form>
+                    )
+                }}
+            </Formik>
         </div>
     )
 }

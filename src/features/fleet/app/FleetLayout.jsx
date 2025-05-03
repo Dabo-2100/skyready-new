@@ -2,8 +2,6 @@ import clsx from "clsx";
 import { NavLink, Outlet } from "react-router-dom";
 
 export default function FleetLayout() {
-
-
     const links = [
         { name: "Dashboard", path: "", hasEnd: true },
         { name: "Aircraft List", path: "aircraft" },

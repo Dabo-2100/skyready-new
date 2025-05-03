@@ -35,7 +35,7 @@ const useLogin = () => {
                     sessionStorage.clear();
                 }
             },
-            onError: async (error) => {
+            onError: async () => {
                 toast.error('Wrong email or password', { duration: 1500, position: "top-center" })
             },
         }
