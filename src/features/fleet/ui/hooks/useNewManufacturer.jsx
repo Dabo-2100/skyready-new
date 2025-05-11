@@ -4,23 +4,23 @@ import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { AircraftRepo } from "../../data/AircraftRepo";
 
-const useNewAircraft = () => {
+const useNewManufacturer = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: (values) => AircraftRepo.store_aircraft(values),
+    mutationFn: (values) => AircraftRepo.store_aircraft_manufacturer(values),
 
     onSuccess: async (res) => {
       await Swal.fire({
         icon: res ? "success" : "error",
-        title: res ? "Aircraft created successfully!" : "Something went wrong!",
+        title: res ? "Aircraft Manufacturer created successfully!" : "Something went wrong!",
         timer: 2000,
       });
 
       if (res) {
-        queryClient.setQueryData(["aircraftList"], (prev) => [...prev, res]);
-        navigate("/fleet/aircraft/");
+        queryClient.setQueryData(["aircraftManufacturers"], (prev) => [...prev, res]);
+        navigate("../");
       }
     },
     onError: async () => {
@@ -29,4 +29,4 @@ const useNewAircraft = () => {
   });
 };
 
-export default useNewAircraft;
+export default useNewManufacturer;
