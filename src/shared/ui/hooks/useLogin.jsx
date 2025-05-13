@@ -3,35 +3,35 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
 import toast from "react-hot-toast";
 import { UserRepo } from "../../data/UserRepo";
+import { AuthService } from "../../../services/authService";
 
 const useLogin = () => {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ email, password }) => UserRepo.user_login(email, password),
+    mutationFn: UserRepo.user_login,
 
-    onSuccess: async (res, variables) => {
-      await Swal.fire({
-        icon: res ? "success" : "error",
-        title: res ? "Login successfully!" : "Wrong username or password!",
-        timer: 2000,
+    onSuccess: async (res) => {
+      const message = res ? "Login successfully!" : "Wrong username or password!";
+      const id = toast.loading("Logging in...");
+      toast.dismiss(id);
+
+      toast[res ? "success" : "error"](message, {
+        duration: 2000,
+        position: "top-center",
+        style: {
+          fontFamily: "Inter",
+          background: res ? "#004AAD" : "#EF4444",
+          color: "#fff",
+        },
       });
 
       if (res) {
-        queryClient.setQueryData(["userInfo"], res.userInfo);
-
-        if (variables.rememberIndex) {
-          localStorage.setItem("token", res.jwt);
-          localStorage.setItem("userInfo", JSON.stringify(res.user));
-        } else {
-          sessionStorage.setItem("token", res.jwt);
-          sessionStorage.setItem("userInfo", JSON.stringify(res.user));
-        }
+        queryClient.setQueryData(["userInfo"], res.user);
         navigate("/");
       } else {
-        localStorage.clear();
-        sessionStorage.clear();
+        AuthService.clearToken();
       }
     },
     onError: async () => {

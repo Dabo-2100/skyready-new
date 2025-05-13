@@ -10,6 +10,8 @@ import { storeAircraftManufacturer } from "./apis/store_aircraft_manufacturer";
 import { showAircraftManufacturer } from "./apis/show_aircraft_manufacturer";
 import { updateAircraftManufacturer } from "./apis/update_aircraft_manufacturer";
 import { deleteAircraftManufacturer } from "./apis/delete_aircraft_manufacturer";
+import { deleteAircraft } from "./apis/delete_aircraft";
+
 export const AircraftRepo = {
   index_aircraft: async (activePage = 1, modelId = null) => await indexAircraft(activePage, modelId),
   show_aircraft: async (id) => await showAircraft(id),
@@ -23,4 +25,5 @@ export const AircraftRepo = {
   show_aircraft_manufacturer: async (id) => await showAircraftManufacturer(id),
   update_aircraft_manufacturer: async (id, data) => await updateAircraftManufacturer(id, data),
   delete_aircraft_manufacturer: async (id) => await deleteAircraftManufacturer(id),
+  delete_aircraft: async (id) => await deleteAircraft(id),
 };

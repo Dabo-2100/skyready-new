@@ -1,41 +1,22 @@
-import clsx from "clsx";
-import { useTheme } from "./zustand-store";
+import React, { lazy, Suspense } from "react";
 import { Route, Routes } from "react-router-dom";
-import LoginPage from "./shared/ui/pages/LoginPage";
-import MainLayout from "./shared/ui/layouts/MainLayout";
-import FleetLayout from "./features/fleet/app/FleetLayout";
-import AircraftDetails from "./features/fleet/ui/pages/Aircraft/AircraftDetails";
-import NewAircraft from "./features/fleet/ui/pages/Aircraft/NewAircraft";
-import TypeList from "./features/fleet/ui/pages/AircraftType/AirctaftTypeList";
-import NewAircraftType from "./features/fleet/ui/pages/AircraftType/NewAircraftType";
-import ModelList from "./features/fleet/ui/pages/AircraftModel/ModelList";
-import ManufacturerList from "./features/fleet/ui/pages/AircraftManufacturer/ManufacturerList";
-import NewManufacturer from "./features/fleet/ui/pages/AircraftManufacturer/NewManufacturer";
-import ManufacturerDetails from "./features/fleet/ui/pages/AircraftManufacturer/ManufacturerDetails";
-import AircraftList from "./features/fleet/ui/pages/Aircraft/AircraftList";
-import FleetDashboard from "./features/fleet/app/FleetDashboard";
-import { useMemo } from "react";
-import { Toaster } from "react-hot-toast";
-import Page404 from "./shared/ui/pages/Page404";
-import Page403 from "./shared/ui/pages/Page403";
-import Dashboard from "./shared/ui/pages/Dashboard";
-export default function App() {
-  const { isDark } = useTheme();
+import Loader from "./Loader";
+import FleetLayout from "../features/fleet/app/FleetLayout";
 
-  const appStyle = useMemo(() => clsx(isDark && "dark", "w-full h-[100dvh] overflow-hidden font-poppins", "text-[var(--color-text)] ", "bg-[var(--color-bg)]"), [isDark]);
+export default function AppRoutes() {
+  const MainLayout = lazy(() => import("../shared/ui/layouts/MainLayout"));
 
   return (
-    <div className={appStyle}>
-      <Toaster position="top-center" />
+    <Suspense fallback={<Loader />}>
       <Routes>
         <Route path="/" element={<MainLayout />}>
-          <Route index element={<Dashboard />} />
+          <Route index element={<h1>Dashboard</h1>} />
 
           <Route path="fleet" element={<FleetLayout />}>
-            <Route index element={<AircraftList />} />
+            <Route index element={<h1>Dashboard</h1>} />
 
             <Route path="aircraft">
-              <Route index element={<Page403 />} />
+              <Route index element={<AircraftList />} />
 
               <Route path="type">
                 <Route index element={<TypeList />} />
@@ -46,7 +27,7 @@ export default function App() {
               <Route path="manufacturer">
                 <Route index element={<ManufacturerList />} />
                 <Route path="new" element={<NewManufacturer />} />
-                <Route path=":manufacturer_id" element={<ManufacturerDetails />} />
+                <Route path=":manufacturer_id" element={<ShowManufacturer />} />
               </Route>
 
               <Route path="model">
@@ -93,9 +74,7 @@ export default function App() {
           <Route path="users" element={<h1>Users List</h1>} />
         </Route>
         <Route path="/login" element={<LoginPage />} />
-        <Route path="/forbidden" element={<Page403 />} />
-        <Route path="*" element={<Page404 />} />
       </Routes>
-    </div>
+    </Suspense>
   );
 }

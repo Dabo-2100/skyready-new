@@ -49,7 +49,7 @@ export default function NewAircraft() {
     setAircraftList(aircraftListData);
   }, [aircraftListData]);
   return (
-    <div className="flex flex-col w-full h-full overflow-auto">
+    <div className="flex flex-col w-full h-full overflow-auto p-3">
       {isLoading && <Loader />}
       <Formik initialValues={initialValues} onSubmit={handleSubmit} validationSchema={validationSchema}>
         {({ values }) => {
@@ -61,23 +61,23 @@ export default function NewAircraft() {
           }, [values.aircraft_model]);
           return (
             <Form className="flex flex-col w-full h-full">
-              <div className="w-full p-3 flex items-center justify-between gap-3 border-b border-b-slate-50/20">
-                <Link to="../" className="text-primary flex items-center gap-2">
+              <div className="w-full p-3 pt-1 flex items-center justify-between gap-3 border-b border-b-gray-200">
+                <Link to="/fleet" className="text-primary flex items-center gap-2">
                   <FaLongArrowAltLeft /> Back
                 </Link>
-                <h1 className="font-bold text-2xl">Add New Aircraft to fleet</h1>
-                <button className="btn btn-soft btn-primary" type="submit">
+                <h1 className="font-semibold text-xl">Add New Aircraft to fleet</h1>
+                <button className="bg-[#004AAD] hover:bg-blue-700 text-white py-2 px-6 rounded-md shadow cursor-pointer" type="submit">
                   Save
                 </button>
               </div>
-              <div className="w-full grow p-3 bg-red">
-                <div className="bg-black/30 rounded p-3 w-full">
+              <div className="w-full grow p-3">
+                <div className="bg-white rounded p-3 w-full">
                   <div className="w-full grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2 md:col-span-2 lg:col-span-3">
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 md:col-span-2 lg:col-span-3">
                       <div className="flex flex-col gap-2">
                         <label className="flex items-center justify-between">
                           <p className="flex items-center gap-2">
-                            Manufacturer<span className="text-red-500">*</span>
+                            Manufacturer<span className="text-[#DC2626]">*</span>
                           </p>
                           <Link to="/fleet/aircraft/manufacturer">
                             <FaGear className="bg-primary text-white rounded-lg p-1 text-2xl" />
@@ -93,13 +93,13 @@ export default function NewAircraft() {
                             </option>
                           ))}
                         </Field>
-                        <ErrorMessage name="vendorId" component={"div"} className="text-red-500" />
+                        <ErrorMessage name="vendorId" component={"div"} className="text-[#DC2626]" />
                       </div>
 
                       {values?.vendorId != -1 && (
                         <div className="flex flex-col gap-2">
                           <label>
-                            Aircraft Type<span className="text-red-500">*</span>
+                            Aircraft Type <span className="text-[#DC2626]">*</span>
                           </label>
                           <Field as="select" name="typeId" className="select w-full">
                             <option value={-1} hidden>
@@ -111,14 +111,14 @@ export default function NewAircraft() {
                               </option>
                             ))}
                           </Field>
-                          <ErrorMessage name="typeId" component={"div"} className="text-red-500" />
+                          <ErrorMessage name="typeId" component={"div"} className="text-[#DC2626]" />
                         </div>
                       )}
 
                       {values?.typeId != -1 && (
                         <div className="flex flex-col gap-2">
                           <label>
-                            Aircraft Model<span className="text-red-500">*</span>
+                            Aircraft Model <span className="text-[#DC2626]">*</span>
                           </label>
                           <Field as="select" name="aircraft_model" className="select w-full">
                             <option value={-1} hidden>
@@ -130,7 +130,7 @@ export default function NewAircraft() {
                               </option>
                             ))}
                           </Field>
-                          <ErrorMessage name="aircraft_model" component={"div"} className="text-red-500" />
+                          <ErrorMessage name="aircraft_model" component={"div"} className="text-[#DC2626]" />
                         </div>
                       )}
                     </div>
@@ -139,31 +139,31 @@ export default function NewAircraft() {
                       <>
                         <div className="flex flex-col gap-2">
                           <label>
-                            Serial No <span className="text-red-500">*</span>
+                            Serial No <span className="text-[#DC2626]">*</span>
                           </label>
-                          <Field name="serialNo" className="input w-full" placeholder="Enter serial no ..." type="text" />
-                          <ErrorMessage name="serialNo" component={"div"} className="text-red-500" />
+                          <Field name="serialNo" className="my-input w-full" placeholder="Enter serial no ..." type="text" />
+                          <ErrorMessage name="serialNo" component={"div"} className="text-[#DC2626]" />
                         </div>
 
                         <div className="flex flex-col gap-2">
                           <label>
-                            Registration No<span className="text-red-500">*</span>
+                            Registration No<span className="text-[#DC2626]">*</span>
                           </label>
-                          <Field name="registrationNo" className="input w-full" placeholder="Enter registeraion no ..." type="text" />
-                          <ErrorMessage name="registrationNo" component={"div"} className="text-red-500" />
+                          <Field name="registrationNo" className="my-input w-full" placeholder="Enter registeraion no ..." type="text" />
+                          <ErrorMessage name="registrationNo" component={"div"} className="text-[#DC2626]" />
                         </div>
 
                         <div className="flex flex-col gap-2">
                           <label>
-                            Tail No<span className="text-red-500">*</span>
+                            Tail No <span className="text-[#DC2626]">*</span>
                           </label>
-                          <Field name="tailNo" className="input w-full" placeholder="Enter tail no ..." type="text" />
-                          <ErrorMessage name="tailNo" component={"div"} className="text-red-500" />
+                          <Field name="tailNo" className="my-input w-full" placeholder="Enter tail no ..." type="text" />
+                          <ErrorMessage name="tailNo" component={"div"} className="text-[#DC2626]" />
                         </div>
 
                         <div className="flex flex-col gap-2">
                           <label>
-                            Aircraft Usage<span className="text-red-500">*</span>
+                            Aircraft Usage<span className="text-[#DC2626]">*</span>
                           </label>
                           <Field as="select" name="aircraft_usage" className="select w-full">
                             <option value={-1} hidden>
@@ -175,16 +175,16 @@ export default function NewAircraft() {
                               </option>
                             ))}
                           </Field>
-                          <ErrorMessage name="aircraft_usage" component={"div"} className="text-red-500" />
+                          <ErrorMessage name="aircraft_usage" component={"div"} className="text-[#DC2626]" />
                         </div>
 
                         <div className="flex flex-col gap-2">
                           <label>
-                            Aircraft Status<span className="text-red-500">*</span>
+                            Aircraft Status<span className="text-[#DC2626]">*</span>
                           </label>
                           <Field as="select" name="aircraft_status" className="select w-full">
                             <option value={-1} hidden>
-                              Select Aircraft Usage
+                              Select Aircraft Status
                             </option>
                             {aircraftStatuses?.map((el) => (
                               <option key={el.documentId} value={el.documentId}>
@@ -192,7 +192,7 @@ export default function NewAircraft() {
                               </option>
                             ))}
                           </Field>
-                          <ErrorMessage name="aircraft_status" component={"div"} className="text-red-500" />
+                          <ErrorMessage name="aircraft_status" component={"div"} className="text-[#DC2626]" />
                         </div>
                       </>
                     )}

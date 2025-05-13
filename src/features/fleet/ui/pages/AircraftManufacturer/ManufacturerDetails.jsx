@@ -9,7 +9,7 @@ import { ErrorMessage, Field, Form, Formik } from "formik";
 import useUpdateManufacturer from "../../hooks/useUpdateManufacturer";
 import useDeleteManufacturer from "../../hooks/useDeleteManufacturer";
 import Swal from "sweetalert2";
-export default function ShowManufacturer() {
+export default function ManufacturerDetails() {
   const navigate = useNavigate();
   const { manufacturer_id } = useParams();
   const { mutate: updateManufacturer, isLoading: isUpdatingManufacturer } = useUpdateManufacturer();

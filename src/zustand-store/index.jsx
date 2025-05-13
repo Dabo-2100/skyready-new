@@ -3,6 +3,9 @@ import { GiHelicopter } from "react-icons/gi";
 import { FaBusinessTime } from "react-icons/fa";
 import { FaUsersCog } from "react-icons/fa";
 import axios from "axios";
+import { AuthService } from "../services/authService";
+import { TbLayoutDashboardFilled } from "react-icons/tb";
+import { BiSolidPlaneAlt } from "react-icons/bi";
 
 export const noRefreshState = {
   refetchOnReconnect: false,
@@ -19,21 +22,20 @@ export const api = axios.create({
 });
 
 api.interceptors.request.use((config) => {
-  const token =
-    localStorage.getItem("token") || sessionStorage.getItem("token");
+  const token = AuthService.getToken();
   if (token) config.headers.Authorization = `Bearer ${token}`;
   return config;
 });
 
 export const sideMenuLinks = [
-  { name: "Dashboard", path: "", icon: <GiHelicopter />, hasEnd: true },
-  { name: "Fleet Manager", path: "/fleet", icon: <GiHelicopter /> },
-  { name: "Projects Manager", path: "/projects", icon: <FaBusinessTime /> },
-  { name: "Warehouse Manager", path: "/warehouse", icon: <FaBusinessTime /> },
-  { name: "Users Manager", path: "/users", icon: <FaUsersCog /> },
+  { name: "Dashboard", path: "", icon: <TbLayoutDashboardFilled />, hasEnd: true },
+  { name: "Fleet", path: "/fleet", icon: <BiSolidPlaneAlt /> },
+  { name: "Projects", path: "/projects", icon: <FaBusinessTime /> },
+  { name: "Warehouse", path: "/warehouse", icon: <FaBusinessTime /> },
+  { name: "Users", path: "/users", icon: <FaUsersCog /> },
 ];
 
 export const useTheme = create((set) => ({
-  isDark: true,
+  isDark: false,
   toggleTheme: () => set((state) => ({ isDark: !state.isDark })),
 }));

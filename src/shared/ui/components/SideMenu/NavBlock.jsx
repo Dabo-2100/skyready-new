@@ -1,43 +1,20 @@
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink } from "react-router-dom";
 import { sideMenuLinks } from "../../../../zustand-store";
 import clsx from "clsx";
 import { FaSignOutAlt } from "react-icons/fa";
-import { useQueryClient } from "@tanstack/react-query";
+import useLogout from "../../hooks/useLogout";
 export default function NavBlock() {
-  const queryClient = useQueryClient();
-  const navigate = useNavigate();
-  const navStyle = clsx("flex grow p-2", "flex-row md:flex-col");
-  const linkStyle = (isActive) =>
-    clsx(
-      "flex text-md transition-all",
-      "flex-col md:flex-row",
-      " grow md:grow-0",
-      "items-center p-3",
-      "gap-0 md:gap-3",
-      "hover:bg-black/20 hover:rounded hover:font-bold",
-      isActive && "bg-black/20 rounded font-bold"
-    );
+  const logout = useLogout();
+  const navStyle = clsx("flex grow p-3 gap-2", "flex-row md:flex-col");
+  const linkStyle = (isActive) => clsx("flex text-md transition-all", "flex-col md:flex-row", " grow md:grow-0", "items-center p-3", "gap-0 md:gap-3", "hover:bg-white/20 hover:rounded-lg hover:font-bold hover:text-white", isActive && "bg-white/20 rounded-lg font-bold text-white");
   return (
     <nav className={navStyle}>
       {sideMenuLinks?.map((link) => (
-        <NavLink
-          key={link.name}
-          end={link.hasEnd}
-          className={({ isActive }) => linkStyle(isActive)}
-          to={link.path}
-        >
+        <NavLink key={link.name} end={link.hasEnd} className={({ isActive }) => linkStyle(isActive)} to={link.path}>
           {link.icon} {link.name}
         </NavLink>
       ))}
-      <div
-        className="flex text-md transition-all p-3 items-center gap-3 cursor-pointer hover:bg-black/20 hover:rounded hover:font-bold"
-        onClick={() => {
-          queryClient.setQueryData(["userInfo"], null);
-          localStorage.clear();
-          sessionStorage.clear();
-          navigate("/login");
-        }}
-      >
+      <div className="flex text-md transition-all p-3 items-center gap-3 cursor-pointer hover:bg-white/20 text-white hover:rounded-lg hover:font-bold" onClick={logout}>
         <FaSignOutAlt /> Logout
       </div>
     </nav>

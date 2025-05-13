@@ -1,27 +1,18 @@
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { AircraftRepo } from "../data/AircraftRepo";
-import { noRefreshState } from "../../../zustand-store";
-import clsx from "clsx";
-import Loader from "../../../shared/ui/components/Loader";
+import { AircraftRepo } from "../../../data/AircraftRepo";
+import { noRefreshState } from "../../../../../zustand-store";
+import Loader from "../../../../../shared/ui/components/Loader";
 import { FaSort } from "react-icons/fa";
 export default function AircraftList() {
   const [view, setView] = useState([]);
   const [search, setSearch] = useState("");
   const { data: aircraftList, isLoading } = useQuery({ queryKey: ["aircraftList"], queryFn: () => AircraftRepo.index_aircraft(activePage, null), ...noRefreshState });
   const navigate = useNavigate();
-  const [activePage, setActivePage] = useState(1);
+  const [activePage] = useState(1);
 
-  const [sort, setSort] = useState({
-    serialNo: null,
-    tailNo: null,
-    registrationNo: null,
-  });
-
-  const statusStyle = (bgColor) => {
-    return clsx("badge badge-soft h-auto ", bgColor ? `badge-${bgColor}` : "badge-info");
-  };
+  const [sort, setSort] = useState({ serialNo: null, tailNo: null, registrationNo: null });
 
   useEffect(() => {
     setView(aircraftList || []);
@@ -59,34 +50,26 @@ export default function AircraftList() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [sort]);
   return (
-    <div className="w-full h-full">
+    <div className="w-full h-full flex flex-col overflow-hidden">
       {isLoading && <Loader />}
+
       <div className="flex justify-between items-center p-4">
         <div className="flex gap-3 grow items-center">
-          <h1 className="text-lg font-bold">Aircraft List</h1>
-          <label className="input">
-            <svg className="h-[1em] opacity-50" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-              {" "}
-              <g strokeLinejoin="round" strokeLinecap="round" strokeWidth="2.5" fill="none" stroke="currentColor">
-                {" "}
-                <circle cx="11" cy="11" r="8"></circle> <path d="m21 21-4.3-4.3"></path>{" "}
-              </g>{" "}
-            </svg>
-            <input type="search" placeholder="Search Aircraft Fleet" onChange={(e) => setSearch(e.target.value)} />
-          </label>
+          {/* <h1 className="text-lg font-bold">Aircraft List</h1> */}
+          <input className="my-input" type="search" placeholder="Search Aircraft Fleet" onChange={(e) => setSearch(e.target.value)} />
         </div>
         <div className="flex gap-3">
-          <Link to="new" className="btn btn-soft btn-primary">
-            New Aircraft
+          <Link to="aircraft/new" className="btn btn-primary text-white">
+            + New Aircraft
           </Link>
         </div>
       </div>
 
-      <div className="flex p-4 w-full">
-        <div className="w-full overflow-x-auto rounded-box border border-base-content/5 bg-base-100">
-          <table className="table text-center">
+      <div className="flex p-4 w-full grow overflow-hidden">
+        <div className="w-full overflow-auto rounded-box border border-base-content/5">
+          <table className="table text-center border-gray-200">
             <thead>
-              <tr>
+              <tr className="text-[var(--color-text)] border-b border-gray-200 bg-[var(--color-bg)]">
                 <th>-</th>
                 <th>
                   <div className="flex items-center gap-2">
@@ -107,17 +90,17 @@ export default function AircraftList() {
                   </div>
                 </th>
                 <th>
-                  <Link to="model" className="w-full underline hover:text-primary text-center">
+                  <Link to="aircraft/model" className="w-full underline hover:text-primary text-center">
                     Aircraft Model
                   </Link>
                 </th>
                 <th>
-                  <Link to="usage" className="w-full underline hover:text-primary text-center">
+                  <Link to="aircraft/usage" className="w-full underline hover:text-primary text-center">
                     Usage
                   </Link>
                 </th>
                 <th>
-                  <Link to="status" className="w-full underline hover:text-primary text-center">
+                  <Link to="aircraft/status" className="w-full underline hover:text-primary text-center">
                     Status
                   </Link>
                 </th>
@@ -125,7 +108,7 @@ export default function AircraftList() {
             </thead>
             <tbody>
               {view?.map((el, index) => (
-                <tr key={el.documentId} className="hover:bg-base-300 transition cursor-pointer" onClick={() => navigate(el.documentId)}>
+                <tr key={el.documentId} className="transition cursor-pointer border-b border-gray-200 hover:bg-gray-100" onClick={() => navigate("aircraft/" + el.documentId)}>
                   <th>{index + (activePage - 1) * 25 + 1}</th>
                   <td>{el.serialNo}</td>
                   <td>{el.tailNo}</td>
@@ -133,21 +116,12 @@ export default function AircraftList() {
                   <td>{el.aircraft_model?.name}</td>
                   <td>{el.aircraft_usage?.name}</td>
                   <td>
-                    <div className={statusStyle(el.aircraft_status?.bgColor)}>{el.aircraft_status?.name}</div>
+                    <div className={el?.aircraft_status?.bgColor}>{el.aircraft_status?.name}</div>
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
-          {Math.ceil(aircraftList?.length / 25) > 1 && (
-            <div className="join w-full flex justify-center p-3">
-              {Array.from({ length: Math.ceil(aircraftList?.length / 25) }, (_, i) => i + 1).map((el, index) => (
-                <button onClick={() => setActivePage(index)} className={`join-item btn ${activePage == index ? "btn-active" : ""}`} key={el}>
-                  {index + 1}
-                </button>
-              ))}
-            </div>
-          )}
         </div>
       </div>
     </div>

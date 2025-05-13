@@ -1,3 +1,70 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Open+Sans:ital,wght@0,300..800;1,300..800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap");
 @import "tailwindcss";
 @plugin "daisyui";
 @custom-variant dark (&:where(.dark, .dark *));
+
+@theme {
+  --color-primary: #004aad; /* Skyready Blue */
+  --color-accent: #ffa726; /* Orange */
+  --color-bg: #f7f9fc; /* Light Gray */
+  --color-text: #1e1e1e; /* Dark Gray */
+  --color-border: #e0e0e0; /* Border Color */
+  --font-roboto: "Roboto", sans-serif;
+  --font-inter: "Inter", sans-serif;
+  --font-sans: "Open Sans", sans-serif;
+  --font-poppins: "Poppins", sans-serif;
+}
+
+@layer components {
+  .status-in-service {
+    @apply bg-green-100 text-green-700 py-0.5 rounded-xl border border-green-300;
+  }
+
+  .status-in-maintenance {
+    @apply bg-yellow-100 text-yellow-700 py-0.5 rounded-xl border border-yellow-300;
+  }
+
+  .status-aog {
+    @apply bg-red-100 text-red-700 py-0.5 rounded-xl border border-red-300;
+  }
+
+  .status-planned-maintenance {
+    @apply bg-orange-100 text-orange-700 py-0.5 rounded-xl border border-orange-300;
+  }
+  .status-out-of-service {
+    @apply bg-gray-100 text-gray-700 py-0.5 rounded-xl border border-gray-300;
+  }
+  .status-awaiting-parts {
+    @apply bg-purple-100 text-purple-700 py-0.5 rounded-xl border border-purple-300;
+  }
+  
+  .my-input {
+    @apply border py-2 px-4 border-[var(--color-border)] rounded-md;
+    &:focus {
+      transition: ease all 400ms;
+      @apply outline-1 outline-[var(--color-primary)];
+    }
+  }
+
+  .btn-primary {
+    @apply w-full border-0;
+  }
+
+  input:-webkit-autofill {
+    @apply bg-transparent text-[var(--color-text)];
+    transition: background-color 5000s ease-in-out 0s;
+    -webkit-text-fill-color: var(--color-text) !important;
+  }
+
+  input:-moz-autofill {
+    background-color: transparent;
+    color: #1e1e1e;
+  }
+}
+
+select {
+  @apply bg-transparent border border-[var(--color-border)] font-poppins;
+  options {
+    @apply font-poppins;
+  }
+}

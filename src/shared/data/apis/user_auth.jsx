@@ -1,4 +1,8 @@
-import axios from "axios"
+import { api } from "../../../zustand-store";
+
 export const userAuth = async () => {
-    return await axios.get('http://82.112.241.233:2000/api/users/me', { headers: { Authorization: `Bearer ${localStorage.getItem("token") || sessionStorage.getItem("token")}` } }).then(res => res.data).catch(() => false);
-}
+  const response = await api.post("", {
+    query: `query Me {me {documentId email username}}`,
+  });
+  return response.data.data.me;
+};
