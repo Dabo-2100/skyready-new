@@ -37,7 +37,7 @@
   .status-awaiting-parts {
     @apply bg-purple-100 text-purple-700 py-0.5 rounded-xl border border-purple-300;
   }
-  
+
   .my-input {
     @apply border py-2 px-4 border-[var(--color-border)] rounded-md;
     &:focus {

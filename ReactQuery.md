@@ -5,6 +5,6 @@
     - aircraftInfo
     - aircraftStatuses
     - aircraftUsages
-    - aircraftManufacturers
+    - manufacturers
     - aircraftModels
     - aircraftTypes

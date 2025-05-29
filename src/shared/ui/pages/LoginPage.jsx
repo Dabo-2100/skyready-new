@@ -43,7 +43,7 @@ export default function LoginPage() {
             <Form>
               <div className="w-full flex flex-col items-center">
                 <img src={logo} alt="logo" className="w-40 mb-5" />
-                <h1 className="text-3xl font-bold text-left w-full font-inter text-[var(--color-text)] mb-4">Log in</h1>
+                <h1 className="text-3xl font-bold text-left w-full ext-[var(--color-text)] mb-4">Log in</h1>
               </div>
               <div className="flex flex-col gap-3">
                 <div className="flex flex-col gap-1">

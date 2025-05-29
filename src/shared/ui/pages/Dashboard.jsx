@@ -2,14 +2,12 @@ import { useQuery } from "@tanstack/react-query";
 import { IoMdNotificationsOutline } from "react-icons/io";
 import { UserRepo } from "../../data/UserRepo";
 import { AuthService } from "../../../services/authService";
-import Loader from "../components/Loader";
+import { noRefreshState } from "../../../zustand-store";
 export default function Dashboard() {
   const widgets = ["Count", "Chart", "Table"];
-  const { data: userInfo, isLoading } = useQuery({ queryKey: ["userInfo"], queryFn: UserRepo.user_auth, enabled: !!AuthService.getToken() });
-  console.log(userInfo);
+  const { data: userInfo } = useQuery({ queryKey: ["userInfo"], queryFn: UserRepo.user_auth, ...noRefreshState, enabled: !!AuthService.getToken() });
   return (
     <div className="w-full h-full flex flex-col text-[var(--color-text)]">
-      {isLoading && <Loader />}
       <div className="flex justify-between items-center p-4 bg-white border-b border-gray-200">
         <h1 className="text-2xl font-semibold text-[var(--color-text)]">Dashboard</h1>
         <div className="flex items-center gap-3">

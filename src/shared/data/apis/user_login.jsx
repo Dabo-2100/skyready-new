@@ -6,14 +6,7 @@ export const userLogin = async ({ identifier, password, rememberIndex }) => {
     const res = await api.post("", {
       query: `
         mutation Login($input: UsersPermissionsLoginInput!) {
-          login(input: $input) {
-            jwt
-            user {
-              documentId
-              email
-              username
-            }
-          }
+          login(input: $input) { jwt user { documentId email username }}
         }
       `,
       variables: {
@@ -31,33 +24,26 @@ export const userLogin = async ({ identifier, password, rememberIndex }) => {
     AuthService.setToken(loginData.jwt, rememberIndex);
 
     const featuresResponse = await api.post("", {
-      query: `
-        query UserFeatures($filters: UserFeatureFiltersInput) {
+      query: `query UserFeatures($filters: UserFeatureFiltersInput) {
           userFeatures(filters: $filters) {
-            documentId
-            canUpdate
-            canDelete
-            canCreate
-            feature {
-              name
-              documentId
-            }
+            documentId canCreate canUpdate canDelete
+            system_feature { name documentId path }
           }
         }
       `,
       variables: {
         filters: {
-          user: { documentId: { eq: loginData.user.documentId } },
-          feature: { isActive: { eq: true } },
+          user: { documentId: { eq: `${loginData.user.documentId}` } },
         },
       },
     });
 
     return {
-      user: loginData,
+      user: loginData.user,
       features: featuresResponse.data.data.userFeatures,
     };
   } catch (err) {
+    console.log(err);
     return undefined;
   }
 };

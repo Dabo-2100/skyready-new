@@ -28,12 +28,13 @@ const useLogin = () => {
       });
 
       if (res) {
-        queryClient.setQueryData(["userInfo"], res.user);
+        queryClient.setQueryData(["userInfo"], res);
         navigate("/");
       } else {
         AuthService.clearToken();
       }
     },
+
     onError: async () => {
       toast.error("Wrong email or password", {
         duration: 1500,
